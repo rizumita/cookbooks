@@ -1,6 +1,6 @@
 node[:deploy].each do |application, deploy|
-  `cd #{deploy[:deploy_to]}/current && sudo php oil refine install`
-  `cd #{deploy[:deploy_to]}/current && sudo php oil refine migrate`
+  `cd #{deploy[:current_path]} && sudo php oil refine install`
+  `cd #{deploy[:current_path]} && sudo php oil refine migrate`
 
   #execute "oil refine install" do
   #  cwd deploy[:current_path]
