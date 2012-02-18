@@ -14,16 +14,22 @@ node[:deploy].each do |application, deploy|
     #variables(:hosts => node[:scalarium][:roles][:search][:instances].keys)
     group deploy[:group]
     owner deploy[:user]
-    #only_if { File.exists?("#{deploy[:current_path]}/fuel/app/") }
+    mode 0664
+    only_if do
+      File.exists?("#{deploy[:current_path]}") && File.exists?("#{deploy[:current_path]}/fuel/app/")
+    end
   end
 
-  #template "#{deploy[:current_path]}/fuel/app/config/production/db.php" do
-  #  source "db.php.erb"
-  #  #variables(:hosts => node[:scalarium][:roles][:search][:instances].keys)
-  #  group deploy[:group]
-  #  owner deploy[:user]
-  #  #only_if { File.exists?("#{deploy[:current_path]}/fuel/app/") }
-  #end
+  template "#{deploy[:current_path]}/fuel/app/config/production/db.php" do
+    source "db.php.erb"
+    variables(:database => deploy[:database])
+    group deploy[:group]
+    owner deploy[:user]
+    mode 0660
+    only_if do
+      File.exists?("#{deploy[:current_path]}") && File.exists?("#{deploy[:current_path]}/fuel/app/config/production/")
+    end
+  end
   
   execute "oil refine migrate" do
     cwd deploy[:current_path]
