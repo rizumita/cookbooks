@@ -11,10 +11,9 @@ node[:deploy].each do |application, deploy|
 
   template "#{deploy[:current_path]}/fuel/app/bootstrap.php" do
     source "bootstrap.php.erb"
-    #variables(:hosts => node[:scalarium][:roles][:search][:instances].keys)
     group deploy[:group]
     owner deploy[:user]
-    mode 0664
+    mode 0775
     only_if do
       File.exists?("#{deploy[:current_path]}") && File.exists?("#{deploy[:current_path]}/fuel/app/")
     end
@@ -28,6 +27,27 @@ node[:deploy].each do |application, deploy|
     mode 0660
     only_if do
       File.exists?("#{deploy[:current_path]}") && File.exists?("#{deploy[:current_path]}/fuel/app/config/production/")
+    end
+  end
+
+  template "#{deploy[:current_path]}/fuel/app/config/config.php" do
+    source "config.php.erb"
+    group deploy[:group]
+    owner deploy[:user]
+    mode 0775
+    only_if do
+      File.exists?("#{deploy[:current_path]}") && File.exists?("#{deploy[:current_path]}/fuel/app/config/")
+    end
+  end
+
+  template "#{deploy[:current_path]}/fuel/app/config/cache.php" do
+    source "cache.php.erb"
+    variables(:memcached => deploy[:memcached])
+    group deploy[:group]
+    owner deploy[:user]
+    mode 0775
+    only_if do
+      File.exists?("#{deploy[:current_path]}") && File.exists?("#{deploy[:current_path]}/fuel/app/config/")
     end
   end
   
