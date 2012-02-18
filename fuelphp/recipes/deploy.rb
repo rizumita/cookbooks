@@ -1,6 +1,6 @@
 node[:deploy].each do |application, deploy|
-  `cd #{deploy[:deploy_to]}/current && root php oil refine install`
-  `cd #{deploy[:deploy_to]}/current && root php oil refine migrate`
+  execute "cd #{deploy[:deploy_to]}/current && root php oil refine install"
+  execute "cd #{deploy[:deploy_to]}/current && root php oil refine migrate"
 end
 
 #node[:deploy].each do |application, deploy|
