@@ -10,7 +10,7 @@ node[:deploy].each do |application, deploy|
   end
 
   template "#{deploy[:current_path]}/fuel/app/bootstrap.php" do
-    source "bootstrap.php.erb"
+    #source "bootstrap.php.erb"
     #variables(:hosts => node[:scalarium][:roles][:search][:instances].keys)
     group deploy[:group]
     owner deploy[:user]
